@@ -1,5 +1,6 @@
 import telebot
 import constants
+import random
 
 
 bot = telebot.TeleBot(constants.Token)
@@ -24,8 +25,8 @@ def log(message, answer):
 
 @bot.message_handler(commands=['help'])
 def handler_text(message):
-    answer = """Мои способности весьма специфичны.
-    Но ты только посмотри! Все работает!!!"""
+    answer = """Мои команды: Привет, Как дела,
+     /start, /help, /stop"""
     log(message, answer)
     bot.send_message(message.chat.id, answer)
 
@@ -50,17 +51,21 @@ def handler_text(message):
 
 @bot.message_handler(content_types=['text'])
 def handler_text(message):
-    answer = "Лох, я могу отвечать только на слова Привет и Как дела!"
+    answer = ["Лох, я могу отвечать только на слова Привет и Как дела!", "Я нубас  могу отвечать только на фразы, которые написаны в help"]
+    random.shuffle(answer)
+    answer2 = answer[-1]
     if message.text == "Привет":
         answer = "Привет!"
         log(message, answer)
         bot.send_message(message.chat.id, answer)
     elif message.text == "Как дела":
-        answer = "Отлично!"
-        log(message, answer)
-        bot.send_message(message.chat.id, answer)
+        answer = ["Отлично!", "Плохо", "Нормально, но скучно", 'Жизнь "Бота" такая нудная!']
+
+        answer2 = random.choice(answer)
+        log(message, answer2)
+        bot.send_message(message.chat.id, answer2)
     else:
-        bot.send_message(message.chat.id, answer)
-        log(message, answer)
+        bot.send_message(message.chat.id, answer2)
+        log(message, answer2)
 
 bot.polling(none_stop=True, interval=0)
